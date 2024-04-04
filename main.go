@@ -18,6 +18,7 @@ func check(e error) {
 }
 
 type PageData struct {
+	ThemeName string
 	HostName string
 	Images   []ImagenBase64
 }
@@ -27,10 +28,6 @@ type ImagenBase64 struct {
 	Nombre string
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hi there, I love %s!", r.URL.Path[1:])
-
-}
 
 func main() {
 	carpeta := os.Args[1]
@@ -87,6 +84,7 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 
 		data := PageData{
+			ThemeName: strings.TrimSuffix(carpeta, "/"),
 			HostName: nombreHost,
 			Images:   listaGenerada,
 		}

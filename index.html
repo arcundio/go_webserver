@@ -12,11 +12,14 @@
 
 <body>
     <h1>Nombre del host: {{.HostName}}</h1>
+    <h2> Tema: {{.ThemeName}}</h2>
     <ul> 
             {{range .Images}}
             <img src="{{.Encoding}}" alt="" width="320" height="180">
             <pre>{{.Nombre}}</pre>
             {{end}}
     </ul>
+    <h2>Nombres: Santiago Arciniegas</h2>
+    <h2>Andrés Felipe García</h2>
 </body>
 </html>
