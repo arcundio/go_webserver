@@ -17,6 +17,14 @@ func check(e error) {
 	}
 }
 
+func add(a, b int) int {
+	return a + b
+}
+
+func mod(a, b int) int {
+	return a % b
+}
+
 type PageData struct {
 	ThemeName string
 	HostName  string
@@ -88,7 +96,8 @@ func main() {
 		}
 	}
 
-	tmpl := template.Must(template.ParseFiles("index.html"))
+	// Obtener la plantilla
+	tmpl := template.Must(template.New("index.html").Funcs(template.FuncMap{"mod": mod, "add": add}).ParseFiles("index.html"))
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 
