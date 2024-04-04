@@ -1,7 +1,7 @@
 package main
 
 import (
-	b64 "encoding/base64"
+	"encoding/base64"
 	"fmt"
 	"html/template"
 	"log"
@@ -19,15 +19,14 @@ func check(e error) {
 
 type PageData struct {
 	ThemeName string
-	HostName string
-	Images   []ImagenBase64
+	HostName  string
+	Images    []ImagenBase64
 }
 
 type ImagenBase64 struct {
 	Encoding template.URL
-	Nombre string
+	Nombre   string
 }
-
 
 func main() {
 	carpeta := os.Args[1]
@@ -63,20 +62,30 @@ func main() {
 
 	var listaGenerada []ImagenBase64
 
-	for i := 0; i < 4; i++ {
-		var imagen_aleatoria = archivos[rand.IntN(len(archivos)-1)]
+	for len(listaGenerada) < 4 {
+		imagenAleatoria := archivos[rand.IntN(len(archivos))]
 
-		f, err := os.ReadFile(carpeta + imagen_aleatoria)
-		check(err)
-
-		var src = "data:image/jpg;base64," + b64.StdEncoding.EncodeToString(f)
-
-		imagen := ImagenBase64{
-			Encoding: template.URL(src),
-			Nombre: imagen_aleatoria,
+		repetida := false
+		for _, img := range listaGenerada {
+			if img.Nombre == imagenAleatoria {
+				repetida = true
+				break
+			}
 		}
 
-		listaGenerada = append(listaGenerada, imagen)
+		if !repetida {
+			f, err := os.ReadFile(carpeta + imagenAleatoria)
+			check(err)
+
+			src := "data:image/jpg;base64," + base64.StdEncoding.EncodeToString(f)
+
+			imagen := ImagenBase64{
+				Encoding: template.URL(src),
+				Nombre:   imagenAleatoria,
+			}
+
+			listaGenerada = append(listaGenerada, imagen)
+		}
 	}
 
 	tmpl := template.Must(template.ParseFiles("index.html"))
@@ -85,8 +94,8 @@ func main() {
 
 		data := PageData{
 			ThemeName: strings.TrimSuffix(carpeta, "/"),
-			HostName: nombreHost,
-			Images:   listaGenerada,
+			HostName:  nombreHost,
+			Images:    listaGenerada,
 		}
 
 		tmpl.Execute(w, data)
