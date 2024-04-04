@@ -1,9 +1,12 @@
 package main
 
 import (
-	//b64 "encoding/base64"
+	b64 "encoding/base64"
 	"fmt"
+	"html/template"
+	"log"
 	"math/rand/v2"
+	"net/http"
 	"os"
 	"strings"
 )
@@ -14,8 +17,24 @@ func check(e error) {
 	}
 }
 
+type PageData struct {
+	HostName string
+	Images   []ImagenBase64
+}
+
+type ImagenBase64 struct {
+	Encoding template.URL
+	Nombre string
+}
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hi there, I love %s!", r.URL.Path[1:])
+
+}
+
 func main() {
 	carpeta := os.Args[1]
+	puerto := os.Args[2]
 
 	directorio, err := os.Open(carpeta)
 	check(err)
@@ -45,11 +64,36 @@ func main() {
 
 	fmt.Println("Nombre del host: ", nombreHost)
 
-	/*
-	f, err := os.ReadFile(carpeta + imagen_aleatoria)
-	check(err)
+	var listaGenerada []ImagenBase64
 
-	sEnc := b64.StdEncoding.EncodeToString([]byte(f))
-	fmt.Print(sEnc)
-	*/
+	for i := 0; i < 4; i++ {
+		var imagen_aleatoria = archivos[rand.IntN(len(archivos)-1)]
+
+		f, err := os.ReadFile(carpeta + imagen_aleatoria)
+		check(err)
+
+		var src = "data:image/jpg;base64," + b64.StdEncoding.EncodeToString(f)
+
+		imagen := ImagenBase64{
+			Encoding: template.URL(src),
+			Nombre: imagen_aleatoria,
+		}
+
+		listaGenerada = append(listaGenerada, imagen)
+	}
+
+	tmpl := template.Must(template.ParseFiles("index.html"))
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+
+		data := PageData{
+			HostName: nombreHost,
+			Images:   listaGenerada,
+		}
+
+		tmpl.Execute(w, data)
+	})
+
+	log.Fatal(http.ListenAndServe(":"+puerto, nil))
+
 }
