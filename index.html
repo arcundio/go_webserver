@@ -3,21 +3,36 @@
 
 <head>
     <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Page Title</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src='main.js'></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
 <body>
-    <h1>Nombre del host: {{.HostName}}</h1>
-    <h2>Tema: {{.ThemeName}}</h2>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <header class="p-3 text-bg-dark">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="#" class="fs-1 text-white text-decoration-none">Servidor de Imágenes</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+
+    <p class="text-center fs-2">Nombre del host: {{.HostName}}</p>
+    <p class="text-center fs-2">Tema: {{.ThemeName}}</p>
+
     <ul>
-        <div class="container text-center">
-            <div class="row">
+        <div class="container text-cent er">
+            <div class="row justify-content-md-center">
                 {{range $index, $imagen := .Images}}
-                <div class="col">
+                <div class="col-md-auto">
                     <div class="card mb-3" style="width: 18rem;">
                         <img src="{{$imagen.Encoding}}" class="card-img-top" alt="" width="320" height="180">
                         <div class="card-body">
@@ -27,15 +42,24 @@
                 </div>
                 {{if mod (add $index 1) 2 | eq 0}}
             </div>
-            <div class="row">
+            <div class="row justify-content-md-center">
                 {{end}}
                 {{end}}
             </div>
         </div>
-
     </ul>
 
-<h2>Nombres: Santiago Arciniegas</h2>
-    <h2>Andrés Felipe García</h2>
+    <footer class="p-3 text-bg-dark">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="#" class="fs-2 text-white text-decoration-none">Computación en la nube</a></li>
+                    <li><a href="#" class="fs-2 text-white text-decoration-none">Santiago Arciniegas, Andrés García</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
 </body>
+
 </html>
